@@ -52,7 +52,7 @@ function Dashboard() {
             onClick={() => handleButtonClick("analytics")}
           >
             <SiGoogleanalytics className="mr-2" />
-            <Analytics />
+           <p>Analytics</p>
           </button>
           <button className="flex items-center hover:bg-gray-300 p-2 rounded">
             <CiLogout className="mr-2" />
