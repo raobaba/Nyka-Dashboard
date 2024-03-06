@@ -37,16 +37,21 @@ const loginUser = async (req, res) => {
     try {
       const { email, password } = req.body;
       const user = await User.findOne({ email });
-      console.log(user._id)
-      if (user.email!==email) {
-        return res.status(401).json({ message: 'Invalid email' });
+
+      if (!user) {
+        return res.status(401).json({ message: 'Please check your email' });
+    }
+
+      if (user.password!==password) {
+        return res.status(401).json({ message: 'Please check your password' });
       }
       
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
 
-      res.status(200).json({ message: 'Login successful', token });
+      res.status(200).json({ message: 'Login successful',user, token });
     } catch (error) {
       console.error(error);
+
       res.status(500).json({ message: 'Internal server error' });
     }
   };
