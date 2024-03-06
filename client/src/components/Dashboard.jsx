@@ -8,12 +8,22 @@ import { CiSearch, CiUser } from "react-icons/ci";
 import { FiEdit3 } from "react-icons/fi";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { FaMinus } from "react-icons/fa6";
+import AddProductModal from "./AddProductModal";
 
 function Dashboard() {
   const [activeContent, setActiveContent] = useState("dashboard");
+  const [isAddProductModalOpen, setAddProductModalOpen] = useState(false);
 
   const handleButtonClick = (content) => {
     setActiveContent(content);
+  };
+
+  const openAddProductModal = () => {
+    setAddProductModalOpen(true);
+  };
+
+  const closeAddProductModal = () => {
+    setAddProductModalOpen(false);
   };
 
   return (
@@ -106,7 +116,10 @@ function Dashboard() {
                 </select>
               </div>
               <div className="mt-2 md:mt-0">
-                <button className="bg-blue-500 text-white py-2 px-4 rounded-md focus:outline-none">
+                <button
+                  className="bg-blue-500 text-white py-2 px-4 rounded-md focus:outline-none"
+                  onClick={openAddProductModal}
+                >
                   ADD PRODUCT
                 </button>
               </div>
@@ -143,9 +156,9 @@ function Dashboard() {
                       </td>
                       <td className="py-2 px-4 whitespace-nowrap ">
                         <div className="text-blue-500 hover:underline flex gap-2">
-                          <FiEdit3 className="text-lg cursor-pointer ml-4 "/>
-                          <MdOutlineDeleteOutline className="text-xl cursor-pointer"/>
-                          <FaMinus className="text-lg cursor-pointer"/>
+                          <FiEdit3 className="text-lg cursor-pointer ml-4 " />
+                          <MdOutlineDeleteOutline className="text-xl cursor-pointer" />
+                          <FaMinus className="text-lg cursor-pointer" />
                         </div>
                       </td>
                     </tr>
@@ -161,6 +174,10 @@ function Dashboard() {
           </div>
         )}
       </div>
+      <AddProductModal
+        isOpen={isAddProductModalOpen}
+        onClose={closeAddProductModal}
+      />
     </div>
   );
 }
