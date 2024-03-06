@@ -142,9 +142,11 @@ function Dashboard() {
                         Lorem ipsum dolor sit amet
                       </td>
                       <td className="py-2 px-4 whitespace-nowrap ">
-                        <button className="text-blue-500 hover:underline">
-                          Edit
-                        </button>
+                        <div className="text-blue-500 hover:underline flex gap-2">
+                          <FiEdit3 className="text-lg cursor-pointer ml-4 "/>
+                          <MdOutlineDeleteOutline className="text-xl cursor-pointer"/>
+                          <FaMinus className="text-lg cursor-pointer"/>
+                        </div>
                       </td>
                     </tr>
                   </tbody>
