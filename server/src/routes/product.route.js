@@ -8,10 +8,10 @@ const {
     deleteProduct,
 } = require('../controllers/product.controller')
 
-productRouter.get('/api/products', renderProducts);
-productRouter.get('/api/products/:id', getProductById);
-productRouter.post('/api/products', addProduct);
-productRouter.put('/api/products/:id', editProduct);
-productRouter.delete('/api/products/:id', deleteProduct);
+productRouter.get('/products', renderProducts);
+productRouter.get('/products/:id', getProductById);
+productRouter.post('/products', addProduct);
+productRouter.put('/products/:id', editProduct);
+productRouter.delete('/products/:id', deleteProduct);
 
 module.exports = productRouter;

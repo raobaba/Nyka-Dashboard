@@ -35,7 +35,7 @@ const addProduct = async (req, res) => {
         crop: "scale",
       }
     );
-    const newProduct = new Product({
+    const newProduct = new Product({ 
       name,
       picture: {
         public_id: myCloud.public_id,
@@ -46,9 +46,11 @@ const addProduct = async (req, res) => {
       category,
       price,
     });
+    console.log(newProduct)
     await newProduct.save();
     res.status(201).json(newProduct);
   } catch (error) {
+    console.error(error)
     res.status(400).json({ error: "Bad Request" });
   }
 };
