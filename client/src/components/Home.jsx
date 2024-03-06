@@ -6,8 +6,8 @@ function Home() {
   return (
     <div className='w-full h-10'>
         <Navbar/>
-        <div className='w-full h-auto'>
-         <img src={Home_Page} alt="Home_page" className='w-full' />
+        <div className='w-full h-96'>
+         <img src={Home_Page} alt="Home_page" className='w-full h-[89vh]' />
         </div>
     </div>
   )
