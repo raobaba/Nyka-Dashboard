@@ -103,7 +103,7 @@ function Signup() {
           </button>
          
         </form>
-        <p className='text-center mb-4'>Already have an account. ? <Link className='text-green-500 text-center mb-5' to={'/login'}>Login here..</Link></p>
+        <p className='text-center mb-4'>Already have an account. ? <Link className='text-green-500 text-center mb-5' to={'/login'}>Login here</Link></p>
       </div>
     </div>
   );
