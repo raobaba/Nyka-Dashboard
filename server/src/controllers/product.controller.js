@@ -81,24 +81,29 @@ const editProduct = async (req, res) => {
 
   try {
     const updatedProduct = await Product.findOneAndUpdate(
-      { id: productId },
+      { _id: productId },
       updatedProductData,
-      { new: true }
+      { new: true } 
     );
+    console.log("data",updatedProduct)
+
     if (!updatedProduct) {
-      return res.status(404).json({ error: "Product not found" });
+      return res.status(404).json({ message: "Product not found" });
     }
+
     res.status(200).json(updatedProduct);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
+
 // Delete Product
 const deleteProduct = async (req, res) => {
   const productId = req.params.id;
+  console.log(productId)
   try {
-    const deletedProduct = await Product.findOneAndDelete({ id: productId });
+    const deletedProduct = await Product.findOneAndDelete({ _id: productId });
     if (!deletedProduct) {
       return res.status(404).json({ error: "Product not found" });
     }

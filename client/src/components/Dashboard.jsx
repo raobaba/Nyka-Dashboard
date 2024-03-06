@@ -7,7 +7,6 @@ import { IoIosNotifications, IoIosArrowForward } from "react-icons/io";
 import { CiSearch, CiUser } from "react-icons/ci";
 import { FiEdit3 } from "react-icons/fi";
 import { MdOutlineDeleteOutline } from "react-icons/md";
-import { FaMinus } from "react-icons/fa6";
 import AddProductModal from "./AddProductModal";
 
 function Dashboard() {
@@ -158,7 +157,6 @@ function Dashboard() {
                         <div className="text-blue-500 hover:underline flex gap-2">
                           <FiEdit3 className="text-lg cursor-pointer ml-4 " />
                           <MdOutlineDeleteOutline className="text-xl cursor-pointer" />
-                          <FaMinus className="text-lg cursor-pointer" />
                         </div>
                       </td>
                     </tr>
