@@ -26,7 +26,7 @@ function Login() {
     <div>
       <Navbar />
       <div className="container w-5/12 mx-auto border mt-8">
-        <h1 className="text-3xl text-center font-bold mb-4">Signup</h1>
+        <h1 className="text-3xl text-center font-bold mb-4">Login</h1>
         <form onSubmit={handleSubmit} className="max-w-md mx-auto">
           
           <div className="mb-4">
