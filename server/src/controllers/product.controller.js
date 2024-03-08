@@ -35,7 +35,7 @@ const addProduct = async (req, res) => {
         crop: "scale",
       }
     );
-    const newProduct = new Product({ 
+    const newProduct = new Product({
       name,
       picture: {
         public_id: myCloud.public_id,
@@ -46,18 +46,27 @@ const addProduct = async (req, res) => {
       category,
       price,
     });
-    console.log(newProduct)
+    console.log(newProduct);
     await newProduct.save();
     res.status(201).json(newProduct);
   } catch (error) {
-    console.error(error)
+    console.error(error);
     res.status(400).json({ error: "Bad Request" });
   }
 };
 
 const renderProducts = async (req, res) => {
   try {
-    const { gender, category, sort, search, page = 1, limit = 10 } = req.query;
+    const {
+      gender,
+      category,
+      sort,
+      order,
+      search,
+      page = 1,
+      limit = 10,
+    } = req.query;
+    console.log(req.query)
 
     const filter = {};
     if (gender) filter.gender = gender;
@@ -65,10 +74,15 @@ const renderProducts = async (req, res) => {
     const searchRegex = new RegExp(search, "i");
     if (search) filter.name = searchRegex;
 
-    let products;
+    let sortOption = {};
     if (sort === "price") {
+      sortOption.price = order === "desc" ? -1 : 1;
+    }
+
+    let products;
+    if (sortOption) {
       products = await Product.find(filter)
-        .sort({ price: 1 })
+        .sort(sortOption)
         .skip((page - 1) * limit)
         .limit(parseInt(limit));
     } else {
@@ -83,7 +97,6 @@ const renderProducts = async (req, res) => {
   }
 };
 
-
 const editProduct = async (req, res) => {
   const productId = req.params.id;
   const updatedProductData = req.body;
@@ -92,9 +105,9 @@ const editProduct = async (req, res) => {
     const updatedProduct = await Product.findOneAndUpdate(
       { _id: productId },
       updatedProductData,
-      { new: true } 
+      { new: true }
     );
-    console.log("data",updatedProduct)
+    console.log("data", updatedProduct);
 
     if (!updatedProduct) {
       return res.status(404).json({ message: "Product not found" });
@@ -106,11 +119,10 @@ const editProduct = async (req, res) => {
   }
 };
 
-
 // Delete Product
 const deleteProduct = async (req, res) => {
   const productId = req.params.id;
-  console.log(productId)
+  console.log(productId);
   try {
     const deletedProduct = await Product.findOneAndDelete({ _id: productId });
     if (!deletedProduct) {

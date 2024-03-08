@@ -5,11 +5,12 @@ import { CiLogout } from "react-icons/ci";
 import { IoIosNotifications } from "react-icons/io";
 import { CiSearch, CiUser } from "react-icons/ci";
 import AddProductModal from "./AddProductModal";
+import Analytics from "./Analytics";
 import { logout } from "../redux/actions/user.actions";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../redux/actions/product.actions";
-import Pagination from "./Pagination";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import ProductTable from "./ProductTable";
 import { deleteProduct } from "../redux/actions/product.actions";
 
@@ -27,18 +28,31 @@ function Dashboard() {
   const loading = useSelector((state) => state.product.loading);
   const error = useSelector((state) => state.product.error);
   const products = useSelector((state) => state.product.products);
-
+  const totalItems = products.length;
+  const totalPages = Math.ceil(totalItems / pageLimit);
+  console.log(totalItems);
   useEffect(() => {
-    // Fetch products based on filters, sorting, and pagination
-    dispatch(
-      fetchProducts({
-        page: currentPage,
-        limit: pageLimit,
-        sort: sortOrder,
-        search: searchTerm,
-        filterOptions: { gender: filterGender, category: filterCategory },
-      })
-    );
+    if (sortOrder) {
+      dispatch(
+        fetchProducts({
+          page: currentPage,
+          limit: pageLimit,
+          sort: "price",
+          order: sortOrder,
+          search: searchTerm,
+          filterOptions: { gender: filterGender, category: filterCategory },
+        })
+      );
+    } else {
+      dispatch(
+        fetchProducts({
+          page: currentPage,
+          limit: pageLimit,
+          search: searchTerm,
+          filterOptions: { gender: filterGender, category: filterCategory },
+        })
+      );
+    }
   }, [
     dispatch,
     currentPage,
@@ -65,8 +79,18 @@ function Dashboard() {
     setAddProductModalOpen(false);
   };
   const handleDeleteProduct = (productId) => {
-    console.log(productId)
+    console.log(productId);
     dispatch(deleteProduct(productId));
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const handlePageLimitChange = (newLimit) => {
+    setPageLimit(newLimit);
+    console.log(newLimit);
+    setCurrentPage(1);
   };
 
   return (
@@ -161,8 +185,8 @@ function Dashboard() {
                   onChange={(e) => setSortOrder(e.target.value)}
                 >
                   <option value="">Sort By Price</option>
-                  <option value="ascending">ASCENDING</option>
-                  <option value="descending">DESCENDING</option>
+                  <option value="asc">ASCENDING</option>
+                  <option value="desc">DESCENDING</option>
                 </select>
               </div>
               <div className="mt-2 md:mt-0">
@@ -175,15 +199,43 @@ function Dashboard() {
               </div>
             </div>
 
-            <ProductTable loading={loading} error={error} products={products}  onDeleteProduct={handleDeleteProduct} />
-            <Pagination
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              pageLimit={pageLimit}
-              setPageLimit={setPageLimit}    
+            <ProductTable
+              loading={loading}
+              error={error}
+              products={products}
+              onDeleteProduct={handleDeleteProduct}
             />
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                className="border px-3 py-2 border-gray-300 rounded-l focus:outline-none focus:ring focus:border-blue-300"
+                disabled={currentPage === 1}
+              >
+                <GrFormPrevious />
+              </button>
+              <button className="bg-blue-500 text-white px-3 py-1 rounded focus:outline-none focus:ring focus:border-blue-300 text-lg md:text-xl lg:text-2xl">
+                {currentPage}
+              </button>
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                className="border px-3 py-2 border-gray-300 rounded-r focus:outline-none focus:ring focus:border-blue-300"
+                disabled={currentPage === totalPages}
+              >
+                <GrFormNext />
+              </button>
+              <select
+                className="ml-2 border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:border-blue-300"
+                value={pageLimit}
+                onChange={(e) => handlePageLimitChange(Number(e.target.value))}
+              >
+                <option value={5}>5 per page</option>
+                <option value={10}>10 per page</option>
+                <option value={15}>15 per page</option>
+              </select>
+            </div>
           </div>
         )}
+        {activeContent === "analytics" && <Analytics />}
       </div>
       <AddProductModal
         isOpen={isAddProductModalOpen}
