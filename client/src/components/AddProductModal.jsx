@@ -1,22 +1,45 @@
-// AddProductModal.js
-
 import React, { useState } from "react";
-import { FiX } from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
+import { addProduct } from "../redux/actions/product.actions";
 
 const AddProductModal = ({ isOpen, onClose }) => {
-  const [productName, setProductName] = useState("");
-  const [gender, setGender] = useState("");
-  const [category, setCategory] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
+  const [product, setProduct] = useState({
+    productName: "",
+    gender: "",
+    category: "",
+    price: "",
+    description: "",
+  });
+  const { productName, gender, category, price, description } = product;
+  const [picture, setPicture] = useState(null);
+  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.product.loading);
+  const error = useSelector((state) => state.product.error);
+
+  const handleChange = (e) => {
+    if (e.target.name === "picture") {
+      const file = e.target.files[0];
+      if (file) {
+        console.log("Selected file:", file);
+        setPicture(file);
+      }
+    } else {
+      setProduct({ ...product, [e.target.name]: e.target.value });
+    }
+  };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    // Add your logic to handle the form submission here
-    // You can use the product details (productName, gender, category, price, description)
-    // and perform any necessary actions (e.g., API calls, state updates).
-    // Don't forget to close the modal after handling the submission.
-    onClose();
+    const productData = {
+      name: productName,
+      gender,
+      category,
+      price,
+      description,
+      picture: picture, // Assuming you want to include the picture in the data
+    };
+    dispatch(addProduct(productData));
+
   };
 
   const closeModal = () => {
@@ -30,10 +53,11 @@ const AddProductModal = ({ isOpen, onClose }) => {
         onClick={closeModal}
       ></div>
       <div className="modal-content fixed w-5/12 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 rounded-lg z-50">
-        <div className="w-full m-auto bg-white p-4 z-50 rounded-lg">
-          <h2 className="text-2xl font-bold mb-4">Add Product</h2>
+        <div className="w-full m-auto bg-white h-[570px] p-4 z-50 rounded-lg">
+          <h2 className="text-2xl font-bold mb-2">Add Product</h2>
+          {error && <p className="text-red-500 text-center">{error}</p>}
           <form onSubmit={handleFormSubmit}>
-            <div className="mb-4">
+            <div className="mb-2">
               <label
                 htmlFor="productName"
                 className="block text-sm font-medium text-gray-600"
@@ -46,11 +70,13 @@ const AddProductModal = ({ isOpen, onClose }) => {
                 name="productName"
                 className="mt-1 p-2 border rounded w-full"
                 value={productName}
-                onChange={(e) => setProductName(e.target.value)}
+                onChange={(e) =>
+                  setProduct({ ...product, productName: e.target.value })
+                }
                 required
               />
             </div>
-            <div className="mb-4">
+            <div className="mb-2">
               <label
                 htmlFor="gender"
                 className="block text-sm font-medium text-gray-600"
@@ -62,16 +88,18 @@ const AddProductModal = ({ isOpen, onClose }) => {
                 name="gender"
                 className="mt-1 p-2 border rounded w-full"
                 value={gender}
-                onChange={(e) => setGender(e.target.value)}
+                onChange={(e) =>
+                  setProduct({ ...product, gender: e.target.value })
+                }
                 required
               >
                 <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
               </select>
             </div>
 
-            <div className="mb-4">
+            <div className="mb-2">
               <label
                 htmlFor="category"
                 className="block text-sm font-medium text-gray-600"
@@ -83,16 +111,18 @@ const AddProductModal = ({ isOpen, onClose }) => {
                 name="category"
                 className="mt-1 p-2 border rounded w-full"
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) =>
+                  setProduct({ ...product, category: e.target.value })
+                }
                 required
               >
                 <option value="">Select Category</option>
-                <option value="Makeup">Makeup</option>
-                <option value="SkinCare">SkinCare</option>
-                <option value="Haircare">Haircare</option>
+                <option value="makeup">Makeup</option>
+                <option value="skincare">SkinCare</option>
+                <option value="haircare">Haircare</option>
               </select>
             </div>
-            <div className="mb-4">
+            <div className="mb-2">
               <label
                 htmlFor="price"
                 className="block text-sm font-medium text-gray-600"
@@ -105,11 +135,13 @@ const AddProductModal = ({ isOpen, onClose }) => {
                 name="price"
                 className="mt-1 p-2 border rounded w-full"
                 value={price}
-                onChange={(e) => setPrice(e.target.value)}
+                onChange={(e) =>
+                  setProduct({ ...product, price: e.target.value })
+                }
                 required
               />
             </div>
-            <div className="mb-4">
+            <div className="mb-2">
               <label
                 htmlFor="description"
                 className="block text-sm font-medium text-gray-600"
@@ -121,15 +153,33 @@ const AddProductModal = ({ isOpen, onClose }) => {
                 name="description"
                 className="mt-1 p-2 border rounded w-full"
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) =>
+                  setProduct({ ...product, description: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div className="mb-2">
+              <label
+                htmlFor="avatar"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Picture (Upload)
+              </label>
+              <input
+                type="file"
+                name="picture"
+                accept="image/*"
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
                 required
               />
             </div>
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className="bg-blue-500 text-white w-full mb-2 p-2 rounded hover:bg-blue-700"
             >
-              Submit
+              {loading ? "Submitting..." : "Submit"}
             </button>
           </form>
         </div>

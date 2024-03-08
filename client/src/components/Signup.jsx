@@ -65,7 +65,7 @@ function Signup() {
       <Navbar />
       <div className="container w-5/12 mx-auto border mt-8">
         <h1 className="text-3xl text-center font-bold mb-4">Signup</h1>
-        {error && <p className="text-red text-center">{error}</p>}
+        {error && <p className="text-red-600 text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="max-w-md mx-auto">
           <div className="mb-4">
             <label

@@ -30,7 +30,7 @@ const addProduct = async (req, res) => {
     const myCloud = await cloudinary.uploader.upload(
       req.files.picture.tempFilePath,
       {
-        folder: "avatars",
+        folder: "pictures",
         width: 150,
         crop: "scale",
       }
@@ -57,24 +57,32 @@ const addProduct = async (req, res) => {
 
 const renderProducts = async (req, res) => {
   try {
-    const { gender, category, sort, search } = req.query;
-    console.log(gender)
+    const { gender, category, sort, search, page = 1, limit = 10 } = req.query;
+
     const filter = {};
     if (gender) filter.gender = gender;
     if (category) filter.category = category;
     const searchRegex = new RegExp(search, "i");
     if (search) filter.name = searchRegex;
+
     let products;
     if (sort === "price") {
-      products = await Product.find(filter).sort({ price: 1 });
+      products = await Product.find(filter)
+        .sort({ price: 1 })
+        .skip((page - 1) * limit)
+        .limit(parseInt(limit));
     } else {
-      products = await Product.find(filter);
+      products = await Product.find(filter)
+        .skip((page - 1) * limit)
+        .limit(parseInt(limit));
     }
+
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 const editProduct = async (req, res) => {
   const productId = req.params.id;
