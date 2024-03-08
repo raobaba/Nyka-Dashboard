@@ -1,15 +1,14 @@
-// ProductTable.js
 import React from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { FiEdit3 } from "react-icons/fi";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 
-function ProductTable({ loading, error, products }) {
+function ProductTable({ loading, error, products, onDeleteProduct }) {
   return (
-    <div className="w-full border h-auto min-h-96 mt-10 bg-white">
-      <div className="flex justify-between mt-2">
-        <p className="ml-12 font-semibold">Latest Order</p>
-        <div className="flex mr-10 cursor-pointer">
+    <div className="w-full border h-auto min-h-96 mt-10 bg-white overflow-hidden">
+      <div className="flex flex-col md:flex-row justify-between mt-2">
+        <p className="ml-4 md:ml-12 font-semibold">Latest Order</p>
+        <div className="flex mt-2 md:mt-0 mr-4 md:mr-10 cursor-pointer">
           <p className="font-semibold">More </p>
           <IoIosArrowForward className="mt-1 text-xl" />
         </div>
@@ -48,9 +47,7 @@ function ProductTable({ loading, error, products }) {
                   {/* Display product details here */}
                   <td className="py-2 px-4 whitespace-nowrap">
                     <div className="flex gap-1 items-center">
-                      {" "}
                       <div className="w-8 h-8 border rounded-full bg-slate-100 ali flex items-center justify-center">
-                        {" "}
                         <img
                           src={product.picture.url}
                           alt="Pic"
@@ -74,8 +71,11 @@ function ProductTable({ loading, error, products }) {
                   </td>
                   <td className="py-2 px-4 whitespace-nowrap ">
                     <div className="text-blue-500 hover:underline flex gap-2">
-                      <FiEdit3 className="text-lg cursor-pointer ml-4 " />
-                      <MdOutlineDeleteOutline className="text-xl cursor-pointer" />
+                      <FiEdit3 className="text-lg cursor-pointer ml-4" />
+                      <MdOutlineDeleteOutline
+                        onClick={() => onDeleteProduct(product.id)}
+                        className="text-xl cursor-pointer"
+                      />
                     </div>
                   </td>
                 </tr>

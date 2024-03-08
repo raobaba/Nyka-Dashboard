@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Analytics from "./Analytics";
 import { RxDashboard } from "react-icons/rx";
 import { SiGoogleanalytics } from "react-icons/si";
 import { CiLogout } from "react-icons/ci";
@@ -12,19 +11,48 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../redux/actions/product.actions";
 import Pagination from "./Pagination";
 import ProductTable from "./ProductTable";
+import { deleteProduct } from "../redux/actions/product.actions";
 
 function Dashboard() {
   const [activeContent, setActiveContent] = useState("dashboard");
   const [isAddProductModalOpen, setAddProductModalOpen] = useState(false);
+  const [filterGender, setFilterGender] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
+  const [sortOrder, setSortOrder] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageLimit, setPageLimit] = useState(10);
+
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.product.loading);
   const error = useSelector((state) => state.product.error);
   const products = useSelector((state) => state.product.products);
 
-  console.log(products);
+  useEffect(() => {
+    // Fetch products based on filters, sorting, and pagination
+    dispatch(
+      fetchProducts({
+        page: currentPage,
+        limit: pageLimit,
+        sort: sortOrder,
+        search: searchTerm,
+        filterOptions: { gender: filterGender, category: filterCategory },
+      })
+    );
+  }, [
+    dispatch,
+    currentPage,
+    pageLimit,
+    sortOrder,
+    searchTerm,
+    filterGender,
+    filterCategory,
+  ]);
+
   const handleLogout = () => {
     dispatch(logout());
   };
+
   const handleButtonClick = (content) => {
     setActiveContent(content);
   };
@@ -36,14 +64,15 @@ function Dashboard() {
   const closeAddProductModal = () => {
     setAddProductModalOpen(false);
   };
-  useEffect(() => {
-    dispatch(fetchProducts());
-  }, []);
+  const handleDeleteProduct = (productId) => {
+    console.log(productId)
+    dispatch(deleteProduct(productId));
+  };
 
   return (
     <div className="w-full border h-screen flex flex-col md:flex-row">
       {/* Sidebar */}
-      <div className="h-60 w-full md:w-1/6 p-4 flex flex-col justify-between ">
+      <div className="h-60 w-full md:w-1/6 p-4 flex flex-col justify-between">
         <h2 className="text-2xl font-bold cursor-pointer mb-4">
           <Link to={"/"}>Nyka Dashboard</Link>
         </h2>
@@ -92,6 +121,8 @@ function Dashboard() {
                   type="text"
                   className="w-full h-full border-none rounded-xl outline-none p-2"
                   placeholder="Search..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
               <div className="flex items-center w-full md:w-3/12 justify-end">
@@ -107,8 +138,8 @@ function Dashboard() {
               <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
                 <select
                   className="w-full rounded-lg md:w-auto bg-white border border-gray-300 p-2 focus:outline-none"
-                  name=""
-                  id=""
+                  value={filterGender}
+                  onChange={(e) => setFilterGender(e.target.value)}
                 >
                   <option value="">Filter By Gender</option>
                   <option value="male">MALE</option>
@@ -116,8 +147,8 @@ function Dashboard() {
                 </select>
                 <select
                   className="w-full md:w-auto bg-white border border-gray-300 rounded-lg p-2 mt-2 md:mt-0 md:ml-4 focus:outline-none"
-                  name=""
-                  id=""
+                  value={filterCategory}
+                  onChange={(e) => setFilterCategory(e.target.value)}
                 >
                   <option value="">Filter By Category</option>
                   <option value="makeup">MAKEUP</option>
@@ -126,8 +157,8 @@ function Dashboard() {
                 </select>
                 <select
                   className="w-full md:w-auto bg-white border border-gray-300 rounded-lg p-2 mt-2 md:mt-0 md:ml-4 focus:outline-none"
-                  name=""
-                  id=""
+                  value={sortOrder}
+                  onChange={(e) => setSortOrder(e.target.value)}
                 >
                   <option value="">Sort By Price</option>
                   <option value="ascending">ASCENDING</option>
@@ -144,13 +175,13 @@ function Dashboard() {
               </div>
             </div>
 
-            <ProductTable loading={loading} error={error} products={products} />
-            <Pagination/>
-          </div>
-        )}
-        {activeContent === "analytics" && (
-          <div>
-            <Analytics />
+            <ProductTable loading={loading} error={error} products={products}  onDeleteProduct={handleDeleteProduct} />
+            <Pagination
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              pageLimit={pageLimit}
+              setPageLimit={setPageLimit}    
+            />
           </div>
         )}
       </div>
