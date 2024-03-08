@@ -58,6 +58,7 @@ const addProduct = async (req, res) => {
 const renderProducts = async (req, res) => {
   try {
     const { gender, category, sort, search } = req.query;
+    console.log(gender)
     const filter = {};
     if (gender) filter.gender = gender;
     if (category) filter.category = category;

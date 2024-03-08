@@ -1,25 +1,44 @@
-// Signup.js
-
 import React, { useState } from 'react';
 import Navbar from './Navbar';
-import { Link } from 'react-router-dom';
-
+import { Link,useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/actions/user.actions";
 function Login() {
-  const [formData, setFormData] = useState({
-    name: '',
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const loading = useSelector((state) => state.user.loading);
+  const error = useSelector((state) => state.user.error);
+  const [user, setUser] = useState({
     email: '',
     password: '',
-    profilePic: '',
   });
-
+  const {email,password} = user;
   const handleChange = (e) => {
    
+      setUser({ ...user, [e.target.name]: e.target.value });
+    
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your signup logic here, for example, send the data to a server
-    console.log('Form submitted:', formData);
+  
+    const userObject = {
+      email,
+      password
+    };
+  
+    console.log("User object before dispatch:", userObject);
+  
+    try {
+      await dispatch(login(userObject));
+      setUser({
+        email: "",
+        password: "",
+      });
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error during signup:", error);
+    }
   };
 
   return (
@@ -27,6 +46,7 @@ function Login() {
       <Navbar />
       <div className="container w-5/12 mx-auto border mt-8">
         <h1 className="text-3xl text-center font-bold mb-4">Login</h1>
+        {error && <p className="text-red text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="max-w-md mx-auto">
           
           <div className="mb-4">
@@ -37,7 +57,7 @@ function Login() {
               type="email"
               id="email"
               name="email"
-              value={formData.email}
+              value={email}
               onChange={handleChange}
               className="w-full p-2 border rounded"
               required
@@ -51,7 +71,7 @@ function Login() {
               type="password"
               id="password"
               name="password"
-              value={formData.password}
+              value={password}
               onChange={handleChange}
               className="w-full p-2 border rounded"
               required
@@ -62,11 +82,12 @@ function Login() {
             type="submit"
             className="bg-blue-500 text-white w-full mb-5 p-2 rounded hover:bg-blue-700"
           >
-            Sign In
+            {loading ? "Logging In..." : "Log In"}
           </button>
          
         </form>
-        <p className='text-center mb-4'>Don't have an accoung. ? <Link className='text-green-500 text-center mb-5' to={'/signup'}>SignUp here</Link></p>
+        <p className='text-center mb-4'>Don't have an account? <Link className='text-green-500 text-center mb-5' to={'/signup'}>Sign Up here</Link></p>
+
       </div>
     </div>
   );

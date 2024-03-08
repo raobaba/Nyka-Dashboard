@@ -8,11 +8,18 @@ import { CiSearch, CiUser } from "react-icons/ci";
 import { FiEdit3 } from "react-icons/fi";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import AddProductModal from "./AddProductModal";
+import { useDispatch } from 'react-redux';
+import { logout } from '../redux/actions/user.actions';
+import { Link } from "react-router-dom";
 
 function Dashboard() {
   const [activeContent, setActiveContent] = useState("dashboard");
   const [isAddProductModalOpen, setAddProductModalOpen] = useState(false);
+  const dispatch = useDispatch();
 
+  const handleLogout = () => {
+    dispatch(logout());
+  };
   const handleButtonClick = (content) => {
     setActiveContent(content);
   };
@@ -26,10 +33,10 @@ function Dashboard() {
   };
 
   return (
-    <div className="w-full border border-red-600 h-screen flex flex-col md:flex-row">
+    <div className="w-full border h-screen flex flex-col md:flex-row">
       {/* Sidebar */}
       <div className="h-60 w-full md:w-1/6 p-4 flex flex-col justify-between ">
-        <h2 className="text-2xl font-bold mb-4">Nyka Dashboard</h2>
+        <h2 className="text-2xl font-bold cursor-pointer mb-4"><Link to={'/'}>Nyka Dashboard</Link></h2>
         <div className="flex flex-col">
           <button
             className={`flex items-center p-2 mb-3 rounded ${
@@ -53,7 +60,7 @@ function Dashboard() {
             <SiGoogleanalytics className="mr-2" />
            <p>Analytics</p>
           </button>
-          <button className="flex items-center hover:bg-gray-300 p-2 rounded">
+          <button onClick={handleLogout} className="flex items-center hover:bg-gray-300 p-2 rounded">
             <CiLogout className="mr-2" />
             Logout
           </button>

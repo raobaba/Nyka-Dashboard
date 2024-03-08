@@ -24,14 +24,20 @@ const AddProductModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className={`modal ${isOpen ? 'block' : 'hidden'}`}>
-      <div className="overlay fixed inset-0 bg-black opacity-50" onClick={closeModal}></div>
+    <div className={`modal ${isOpen ? "block" : "hidden"}`}>
+      <div
+        className="overlay fixed inset-0 bg-black opacity-50"
+        onClick={closeModal}
+      ></div>
       <div className="modal-content fixed w-5/12 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 rounded-lg z-50">
         <div className="w-full m-auto bg-white p-4 z-50 rounded-lg">
           <h2 className="text-2xl font-bold mb-4">Add Product</h2>
           <form onSubmit={handleFormSubmit}>
             <div className="mb-4">
-              <label htmlFor="productName" className="block text-sm font-medium text-gray-600">
+              <label
+                htmlFor="productName"
+                className="block text-sm font-medium text-gray-600"
+              >
                 Product Name
               </label>
               <input
@@ -45,35 +51,52 @@ const AddProductModal = ({ isOpen, onClose }) => {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="gender" className="block text-sm font-medium text-gray-600">
+              <label
+                htmlFor="gender"
+                className="block text-sm font-medium text-gray-600"
+              >
                 Gender
               </label>
-              <input
-                type="text"
+              <select
                 id="gender"
                 name="gender"
                 className="mt-1 p-2 border rounded w-full"
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
                 required
-              />
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
             </div>
+
             <div className="mb-4">
-              <label htmlFor="category" className="block text-sm font-medium text-gray-600">
+              <label
+                htmlFor="category"
+                className="block text-sm font-medium text-gray-600"
+              >
                 Category
               </label>
-              <input
-                type="text"
+              <select
                 id="category"
                 name="category"
                 className="mt-1 p-2 border rounded w-full"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 required
-              />
+              >
+                <option value="">Select Category</option>
+                <option value="Makeup">Makeup</option>
+                <option value="SkinCare">SkinCare</option>
+                <option value="Haircare">Haircare</option>
+              </select>
             </div>
             <div className="mb-4">
-              <label htmlFor="price" className="block text-sm font-medium text-gray-600">
+              <label
+                htmlFor="price"
+                className="block text-sm font-medium text-gray-600"
+              >
                 Price
               </label>
               <input
@@ -87,7 +110,10 @@ const AddProductModal = ({ isOpen, onClose }) => {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="description" className="block text-sm font-medium text-gray-600">
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-600"
+              >
                 Description
               </label>
               <textarea
