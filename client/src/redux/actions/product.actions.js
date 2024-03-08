@@ -31,4 +31,24 @@ const addProduct = createAsyncThunk(
   }
 );
 
-export { addProduct };
+const fetchProducts = createAsyncThunk(
+    ProductActionTypes.FETCH_PRODUCTS_REQUEST,
+    async (_, { dispatch }) => {
+      try {
+        dispatch({ type: ProductActionTypes.FETCH_PRODUCTS_REQUEST });
+        const response = await axios.get("http://localhost:8000/api/v1/products");
+        dispatch({
+          type: ProductActionTypes.FETCH_PRODUCTS_SUCCESS,
+          payload: response.data,
+        });
+      } catch (error) {
+        dispatch({
+          type: ProductActionTypes.FETCH_PRODUCTS_FAILURE,
+          payload: error.response.data.error,
+        });
+      }
+    }
+  );
+  
+
+export { addProduct,fetchProducts };

@@ -1,22 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Analytics from "./Analytics";
 import { RxDashboard } from "react-icons/rx";
 import { SiGoogleanalytics } from "react-icons/si";
 import { CiLogout } from "react-icons/ci";
-import { IoIosNotifications, IoIosArrowForward } from "react-icons/io";
+import { IoIosNotifications } from "react-icons/io";
 import { CiSearch, CiUser } from "react-icons/ci";
-import { FiEdit3 } from "react-icons/fi";
-import { MdOutlineDeleteOutline } from "react-icons/md";
 import AddProductModal from "./AddProductModal";
-import { useDispatch } from 'react-redux';
-import { logout } from '../redux/actions/user.actions';
+import { logout } from "../redux/actions/user.actions";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../redux/actions/product.actions";
+import Pagination from "./Pagination";
+import ProductTable from "./ProductTable";
 
 function Dashboard() {
   const [activeContent, setActiveContent] = useState("dashboard");
   const [isAddProductModalOpen, setAddProductModalOpen] = useState(false);
   const dispatch = useDispatch();
+  const loading = useSelector((state) => state.product.loading);
+  const error = useSelector((state) => state.product.error);
+  const products = useSelector((state) => state.product.products);
 
+  console.log(products);
   const handleLogout = () => {
     dispatch(logout());
   };
@@ -31,12 +36,17 @@ function Dashboard() {
   const closeAddProductModal = () => {
     setAddProductModalOpen(false);
   };
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, []);
 
   return (
     <div className="w-full border h-screen flex flex-col md:flex-row">
       {/* Sidebar */}
       <div className="h-60 w-full md:w-1/6 p-4 flex flex-col justify-between ">
-        <h2 className="text-2xl font-bold cursor-pointer mb-4"><Link to={'/'}>Nyka Dashboard</Link></h2>
+        <h2 className="text-2xl font-bold cursor-pointer mb-4">
+          <Link to={"/"}>Nyka Dashboard</Link>
+        </h2>
         <div className="flex flex-col">
           <button
             className={`flex items-center p-2 mb-3 rounded ${
@@ -58,9 +68,12 @@ function Dashboard() {
             onClick={() => handleButtonClick("analytics")}
           >
             <SiGoogleanalytics className="mr-2" />
-           <p>Analytics</p>
+            <p>Analytics</p>
           </button>
-          <button onClick={handleLogout} className="flex items-center hover:bg-gray-300 p-2 rounded">
+          <button
+            onClick={handleLogout}
+            className="flex items-center hover:bg-gray-300 p-2 rounded"
+          >
             <CiLogout className="mr-2" />
             Logout
           </button>
@@ -131,46 +144,8 @@ function Dashboard() {
               </div>
             </div>
 
-            <div className="w-full border h-auto min-h-96 mt-10 bg-white">
-              <div className="flex justify-between mt-2">
-                <p className="ml-12 font-semibold">Latest Order</p>
-                <div className="flex mr-10 cursor-pointer">
-                  <p className="font-semibold">More </p>
-                  <IoIosArrowForward className="mt-1 text-xl" />
-                </div>
-              </div>
-              <div className="w-11/12 m-auto mt-2 h-full overflow-auto">
-                <table className="w-full rounded-xl table-auto">
-                  <thead>
-                    <tr className="bg-gray-100">
-                      <th className="py-2 px-4">Products</th>
-                      <th className="py-2 px-4">Gender</th>
-                      <th className="py-2 px-4">Category</th>
-                      <th className="py-2 px-4">Price</th>
-                      <th className="py-2 px-4">Description</th>
-                      <th className="py-2 px-4">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="hover:bg-gray-50 text-center border-b transition duration-300">
-                      <td className="py-2 px-4 whitespace-nowrap">Product A</td>
-                      <td className="py-2 px-4 whitespace-nowrap">Male</td>
-                      <td className="py-2 px-4 whitespace-nowrap">Clothing</td>
-                      <td className="py-2 px-4 whitespace-nowrap">$29.99</td>
-                      <td className="py-2 px-4 whitespace-nowrap">
-                        Lorem ipsum dolor sit amet
-                      </td>
-                      <td className="py-2 px-4 whitespace-nowrap ">
-                        <div className="text-blue-500 hover:underline flex gap-2">
-                          <FiEdit3 className="text-lg cursor-pointer ml-4 " />
-                          <MdOutlineDeleteOutline className="text-xl cursor-pointer" />
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <ProductTable loading={loading} error={error} products={products} />
+            <Pagination/>
           </div>
         )}
         {activeContent === "analytics" && (

@@ -1,4 +1,3 @@
-// reducers/productReducer.js
 import { createReducer } from "@reduxjs/toolkit";
 import ProductActionTypes from "../actionTypes/product.actionTypes";
 
@@ -25,6 +24,23 @@ const productReducer = createReducer(initialState, (builder) => {
       ...state,
       loading: false,
       addedProduct: null,
+      error: action.payload,
+    }))
+    .addCase(ProductActionTypes.FETCH_PRODUCTS_REQUEST, (state) => ({
+      ...state,
+      loading: true,
+      error: null,
+    }))
+    .addCase(ProductActionTypes.FETCH_PRODUCTS_SUCCESS, (state, action) => ({
+      ...state,
+      loading: false,
+      products: action.payload,
+      error: null,
+    }))
+    .addCase(ProductActionTypes.FETCH_PRODUCTS_FAILURE, (state, action) => ({
+      ...state,
+      loading: false,
+      products: null,
       error: action.payload,
     }));
 });
