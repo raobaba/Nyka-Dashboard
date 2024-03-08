@@ -39,7 +39,14 @@ const AddProductModal = ({ isOpen, onClose }) => {
       picture: picture, // Assuming you want to include the picture in the data
     };
     dispatch(addProduct(productData));
-
+    setProduct({
+      productName: "",
+      gender: "",
+      category: "",
+      price: "",
+      description: "",
+    })
+    setPicture(null);
   };
 
   const closeModal = () => {

@@ -49,7 +49,7 @@ function Signup() {
         email: "",
         password: "",
       });
-      setAvatar('')
+      setAvatar(null)
       // Redirect to login page
       navigate("/login");
     } catch (error) {
