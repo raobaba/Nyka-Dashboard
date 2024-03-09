@@ -14,6 +14,7 @@ import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import ProductTable from "./ProductTable";
 import { deleteProduct } from "../redux/actions/product.actions";
 
+
 function Dashboard() {
   const [activeContent, setActiveContent] = useState("dashboard");
   const [isAddProductModalOpen, setAddProductModalOpen] = useState(false);
@@ -96,7 +97,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="w-full border h-screen flex flex-col md:flex-row">
+    <div className="w-full h-screen flex flex-col md:flex-row">
       {/* Sidebar */}
       <div className="h-60 w-full md:w-1/6 p-4 flex flex-col justify-between">
         <h2 className="text-2xl font-bold cursor-pointer mb-4">
@@ -136,9 +137,10 @@ function Dashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-4 bg-gray-100">
+      <div className="flex-1 p-4 h-full bg-gray-100">
+        {/* Dashboard content */}
         {activeContent === "dashboard" && (
-          <div>
+          <div className="mb-10">
             {/* Content for the Dashboard */}
             <div className="w-full flex flex-col md:flex-row justify-between items-center h-10 mb-4">
               <div className="flex items-center border w-full md:w-7/12 h-full bg-white rounded-xl mb-2 md:mb-0">
@@ -200,14 +202,15 @@ function Dashboard() {
                 </button>
               </div>
             </div>
-
+           {/* Table content */}
             <ProductTable
               loading={loading}
               error={error}
               products={products}
               onDeleteProduct={handleDeleteProduct}
             />
-            <div className="flex items-center space-x-2">
+           {/* Pagination content */}
+            <div className="flex items-center justify-end space-x-2">
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 className="border px-3 py-2 border-gray-300 rounded-l focus:outline-none focus:ring focus:border-blue-300"
@@ -215,7 +218,7 @@ function Dashboard() {
               >
                 <GrFormPrevious />
               </button>
-              <button className="bg-blue-500 text-white px-3 py-1 rounded focus:outline-none focus:ring focus:border-blue-300 text-lg md:text-xl lg:text-2xl">
+              <button className="bg-blue-500 text-white px-3 py-1 rounded focus:outline-none focus:ring focus:border-blue-300 text-md md:text-lg lg:text-lg">
                 {currentPage}
               </button>
               <button
@@ -237,8 +240,10 @@ function Dashboard() {
             </div>
           </div>
         )}
+        {/* Analytics content */}
         {activeContent === "analytics" && <Analytics />}
       </div>
+      {/* Modal for Add Product */}
       <AddProductModal
         isOpen={isAddProductModalOpen}
         onClose={closeAddProductModal}
