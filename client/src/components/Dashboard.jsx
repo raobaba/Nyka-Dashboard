@@ -30,13 +30,16 @@ function Dashboard() {
   const products = useSelector((state) => state.product.products);
   const totalItems = products.length;
   const totalPages = Math.ceil(totalItems / pageLimit);
-  console.log(totalItems);
+  console.log("totalPages",totalPages)
+  console.log("totalItems",totalItems);
+  console.log("currentPages",currentPage);
+  console.log("pageLimit",pageLimit)
   useEffect(() => {
     if (sortOrder) {
       dispatch(
         fetchProducts({
-          page: currentPage,
-          limit: pageLimit,
+          currentPage,
+          pageLimit,
           sort: "price",
           order: sortOrder,
           search: searchTerm,
@@ -46,8 +49,8 @@ function Dashboard() {
     } else {
       dispatch(
         fetchProducts({
-          page: currentPage,
-          limit: pageLimit,
+          currentPage,
+          pageLimit,
           search: searchTerm,
           filterOptions: { gender: filterGender, category: filterCategory },
         })
@@ -89,7 +92,6 @@ function Dashboard() {
 
   const handlePageLimitChange = (newLimit) => {
     setPageLimit(newLimit);
-    console.log(newLimit);
     setCurrentPage(1);
   };
 
@@ -219,7 +221,7 @@ function Dashboard() {
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 className="border px-3 py-2 border-gray-300 rounded-r focus:outline-none focus:ring focus:border-blue-300"
-                disabled={currentPage === totalPages}
+                disabled={pageLimit > totalItems } 
               >
                 <GrFormNext />
               </button>
