@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../redux/actions/product.actions";
+import { fetchProducts } from "../redux/actions/product.actions"; 
 
 const AddProductModal = ({ isOpen, onClose }) => {
   const [product, setProduct] = useState({
@@ -28,7 +29,7 @@ const AddProductModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const productData = {
       name: productName,
@@ -36,19 +37,31 @@ const AddProductModal = ({ isOpen, onClose }) => {
       category,
       price,
       description,
-      picture: picture, // Assuming you want to include the picture in the data
+      picture: picture,
     };
-    dispatch(addProduct(productData));
+
+    await dispatch(addProduct(productData));
+
+    await dispatch(
+      fetchProducts({
+        currentPage: 1, 
+        pageLimit: 10, 
+        sortOrder: "", 
+        searchTerm: "",
+        filterOptions: { gender: "", category: "" },
+      })
+    );
+
     setProduct({
       productName: "",
       gender: "",
       category: "",
       price: "",
       description: "",
-    })
+    });
     setPicture(null);
+    onClose();
   };
-
   const closeModal = () => {
     onClose();
   };
