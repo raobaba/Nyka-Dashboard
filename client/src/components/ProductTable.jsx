@@ -2,8 +2,14 @@ import React from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { FiEdit3 } from "react-icons/fi";
 import { MdOutlineDeleteOutline } from "react-icons/md";
+import { deleteProduct,editProduct } from "../redux/actions/product.actions";
+import { useDispatch } from "react-redux";
 
-function ProductTable({ loading, error, products, onDeleteProduct }) {
+function ProductTable({ loading, error, products }) {
+ const dispatch  =  useDispatch();
+ const onDeleteProduct = (productId) => {
+  dispatch(deleteProduct(productId));
+};
   return (
     <div className="w-full border h-auto min-h-96 mt-10 bg-white overflow-hidden">
       <div className="flex flex-col md:flex-row justify-between mt-2">
@@ -73,7 +79,7 @@ function ProductTable({ loading, error, products, onDeleteProduct }) {
                     <div className="text-blue-500 hover:underline flex gap-2">
                       <FiEdit3 className="text-lg cursor-pointer ml-4" />
                       <MdOutlineDeleteOutline
-                        onClick={() => onDeleteProduct(product.id)}
+                        onClick={() => onDeleteProduct(product._id)}
                         className="text-xl cursor-pointer"
                       />
                     </div>

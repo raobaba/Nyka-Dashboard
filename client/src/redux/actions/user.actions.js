@@ -12,18 +12,18 @@ const signup = createAsyncThunk(
         },
       };
       dispatch({ type: ActionTypes.SIGNUP_REQUEST });
-
       const response = await axios.post(
         "http://localhost:8000/api/v1/signup",
         userData,
         config
       );
-
+      console.log("SignUp response", response);
       dispatch({
         type: ActionTypes.SIGNUP_SUCCESS,
         payload: response.data.user,
       });
     } catch (error) {
+      console.error("Signup error:", error.response.data.error);
       dispatch({
         type: ActionTypes.SIGNUP_FAILURE,
         payload: error.response.data.error,
@@ -48,13 +48,13 @@ const login = createAsyncThunk(
         userData,
         config
       );
-
+      console.log("Login response", response);
       dispatch({
         type: ActionTypes.LOGIN_SUCCESS,
         payload: response.data.user,
       });
-      return response.data;
     } catch (error) {
+      console.error("Signup error:", error.response.data.error);
       dispatch({
         type: ActionTypes.LOGIN_FAILURE,
         payload: error.response.data.error,
@@ -69,6 +69,7 @@ const logout = createAsyncThunk(
     try {
       dispatch({ type: ActionTypes.LOGOUT_REQUEST });
       const response = await axios.get("http://localhost:8000/api/v1/logout");
+      console.log("Logout response", response);
       dispatch({
         type: ActionTypes.LOGOUT_SUCCESS,
         payload: response.data.user,
@@ -76,10 +77,17 @@ const logout = createAsyncThunk(
     } catch (error) {
       dispatch({
         type: ActionTypes.LOGOUT_FAILURE,
-        payload: error.response.data.error,
+        payload: error.response ? error.response.data : error.message,
       });
     }
   }
 );
 
-export { signup, login, logout };
+const clearError = createAsyncThunk(
+  ActionTypes.CLEAR_ERROR,
+  async (_, { dispatch }) => {
+    dispatch({ type: ActionTypes.CLEAR_ERROR });
+  }
+);
+
+export { signup, login, logout, clearError };

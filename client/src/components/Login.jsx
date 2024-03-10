@@ -30,12 +30,13 @@ function Login() {
     console.log("User object before dispatch:", userObject);
   
     try {
-      await dispatch(login(userObject));
+     const response =  await dispatch(login(userObject));
+     console.log(response)
       setUser({
         email: "",
         password: "",
       });
-      navigate("/dashboard");
+     
     } catch (error) {
       console.error("Error during signup:", error);
     }

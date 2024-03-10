@@ -1,6 +1,5 @@
-// user.reducers.js
-import { createReducer } from '@reduxjs/toolkit';
-import { signup, login, logout } from '../actions/user.actions';
+import { createReducer } from "@reduxjs/toolkit";
+import ActionTypes from "../actionTypes/user.actionTypes";
 
 const initialState = {
   user: null,
@@ -8,46 +7,63 @@ const initialState = {
   error: null,
 };
 
+
 const userReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(signup.pending, (state) => ({ ...state, loading: true, error: null }))
-    .addCase(signup.fulfilled, (state, action) => ({
+    .addCase(ActionTypes.SIGNUP_REQUEST, (state) => ({
+      ...state,
+      loading: true,
+      error: null,
+    })) 
+    .addCase(ActionTypes.SIGNUP_SUCCESS, (state, action) => ({
       ...state,
       loading: false,
       user: action.payload,
       error: null,
     }))
-    .addCase(signup.rejected, (state, action) => ({
-      ...state,
-      loading: false,
-      user: null,
-      error: action.error.message || 'Signup failed',
+    .addCase(ActionTypes.SIGNUP_FAILURE, (state, action) => ({
+        ...state,
+        loading: false,
+        user: null,
+        error: action.payload,
     }))
-    .addCase(login.pending, (state) => ({ ...state, loading: true, error: null }))
-    .addCase(login.fulfilled, (state, action) => ({
+    .addCase(ActionTypes.LOGIN_REQUEST, (state) => ({
+      ...state,
+      loading: true,
+      error: null,
+    }))
+    .addCase(ActionTypes.LOGIN_SUCCESS, (state, action) => ({
       ...state,
       loading: false,
       user: action.payload,
       error: null,
     }))
-    .addCase(login.rejected, (state, action) => ({
+    .addCase(ActionTypes.LOGIN_FAILURE, (state, action) => ({
       ...state,
       loading: false,
       user: null,
-      error: action.error.message || 'Login failed',
+      error: action.payload,
     }))
-    .addCase(logout.pending, (state) => ({ ...state, loading: true, error: null }))
-    .addCase(logout.fulfilled, (state) => ({
+    .addCase(ActionTypes.LOGOUT_REQUEST, (state) => ({
+      ...state,
+      loading: true,
+      error: null,
+    }))
+    .addCase(ActionTypes.LOGOUT_SUCCESS, (state) => ({
       ...state,
       loading: false,
       user: null,
       error: null,
     }))
-    .addCase(logout.rejected, (state, action) => ({
+    .addCase(ActionTypes.LOGOUT_FAILURE, (state, action) => ({
       ...state,
       loading: false,
       user: null,
-      error: action.error.message || 'Logout failed',
+      error: action.payload,
+    }))
+    .addCase(ActionTypes.CLEAR_ERROR, (state) => ({
+      ...state,
+      error: null,
     }));
 });
 

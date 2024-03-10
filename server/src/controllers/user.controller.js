@@ -8,7 +8,7 @@ const createUser = async (req, res) => {
     console.log("body",req.body)
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: "A user with this email already exists." });
+      return res.status(404).json({ error: "A user with this email already exists." });
     }
     console.log(req.files)
     const myCloud = await cloudinary.uploader.upload(
@@ -46,11 +46,11 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(401).json({ error: "User not found. Please check your email." });
+      return res.status(404).json({ error: "User not found. Please check your email." });
     }
 
     if (user.password !== password) {
-      return res.status(401).json({ error: "Incorrect password. Please check your password." });
+      return res.status(404).json({ error: "Incorrect password. Please check your password." });
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
@@ -60,10 +60,10 @@ const loginUser = async (req, res) => {
     res.status(200).json({ message: "Login successful", user, token });
   } catch (error) {
     console.error(error);
-
-    res.status(500).json({error: error.message});
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 const logoutUser = (req, res) => {
   res.cookie("token", null, {

@@ -10,6 +10,8 @@ const ActionTypes = {
     LOGOUT_REQUEST: 'LOGOUT_REQUEST',
     LOGOUT_SUCCESS: 'LOGOUT_SUCCESS',
     LOGOUT_FAILURE: 'LOGOUT_FAILURE',
+
+    CLEAR_ERROR: 'CLEAR_ERROR'
   };
   
   export default ActionTypes;

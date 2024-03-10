@@ -1,20 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import { Link,useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { signup } from "../redux/actions/user.actions";
+import { signup, clearError } from "../redux/actions/user.actions";
 
 function Signup() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loading = useSelector((state) => state.user.loading);
-  const error = useSelector((state) => state.user.error);
+  var error = useSelector((state) => state.user.error);
 
   const [user, setUser] = useState({
     name: "",
     email: "",
     password: ""
   });
+
   const [avatar, setAvatar] = useState(null);
   const { name, email, password } = user;
   const handleChange = (e) => {
@@ -29,9 +30,18 @@ function Signup() {
     }
   };
 
+  useEffect(() => {
+    const errorTimeout = setTimeout(() => {
+      dispatch(clearError());
+    }, 3000);
+
+    return () => {
+      clearTimeout(errorTimeout);
+    };
+  }, [error, dispatch]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
     const userObject = {
       name,
       email,
@@ -39,27 +49,23 @@ function Signup() {
       avatar,
     };
   
-    console.log("User object before dispatch:", userObject);
-  
     try {
-      await dispatch(signup(userObject));
-      // Clear form fields on successful signup
+      const response = await dispatch(signup(userObject));
+      console.log(response)
       setUser({
         name: "",
         email: "",
         password: "",
       });
-      setAvatar(null)
-      // Redirect to login page
-      navigate("/login");
+     console.log(error)
+      setAvatar(null);
+      
     } catch (error) {
       console.error("Error during signup:", error);
     }
+    
   };
   
-  
-  
-
   return (
     <div>
       <Navbar />

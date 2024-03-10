@@ -24,7 +24,7 @@ const addProduct = createAsyncThunk(
     } catch (error) {
       dispatch({
         type: ProductActionTypes.ADD_PRODUCT_FAILURE,
-        payload: error.response.data.error,
+        payload: error.response.data.error
       });
     }
   }
@@ -91,7 +91,7 @@ const fetchProducts = createAsyncThunk(
     } catch (error) {
       dispatch({
         type: ProductActionTypes.FETCH_PRODUCTS_FAILURE,
-        payload: error.response.data.error,
+        payload: error.response.data.error
       });
     }
   }
@@ -129,7 +129,6 @@ const deleteProduct = createAsyncThunk(
   ProductActionTypes.DELETE_PRODUCT_REQUEST,
   async (productId, { dispatch }) => {
     try {
-      console.log(productId);
       dispatch({ type: ProductActionTypes.DELETE_PRODUCT_REQUEST });
       await axios.delete(`http://localhost:8000/api/v1/products/${productId}`);
       dispatch({
