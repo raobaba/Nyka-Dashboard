@@ -48,13 +48,16 @@ const login = createAsyncThunk(
         userData,
         config
       );
-      console.log("Login response", response);
+      
+      // Store user data in localStorage on successful login
+      localStorage.setItem('userData', JSON.stringify(response.data.user));
+
       dispatch({
         type: ActionTypes.LOGIN_SUCCESS,
         payload: response.data.user,
       });
     } catch (error) {
-      console.error("Signup error:", error.response.data.error);
+      console.error("Login error:", error.response.data.error);
       dispatch({
         type: ActionTypes.LOGIN_FAILURE,
         payload: error.response.data.error,

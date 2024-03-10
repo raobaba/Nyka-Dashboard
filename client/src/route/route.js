@@ -10,10 +10,7 @@ function Routing() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route
-        path="/dashboard/*" 
-        element={<PrivateRoute />}  
-      />
+      <Route path="/dashboard" element={<PrivateRoute Component={Dashboard} />} />
       <Route path="/analytics" element={<Analytics />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
