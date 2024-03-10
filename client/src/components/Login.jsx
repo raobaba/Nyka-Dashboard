@@ -1,42 +1,49 @@
-import React, { useState } from 'react';
-import Navbar from './Navbar';
-import { Link,useNavigate } from "react-router-dom";
+import React, { useState, useEffect} from "react";
+import Navbar from "./Navbar";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../redux/actions/user.actions";
+import { login, clearError } from "../redux/actions/user.actions";
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loading = useSelector((state) => state.user.loading);
   const error = useSelector((state) => state.user.error);
   const [user, setUser] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
-  const {email,password} = user;
+  const { email, password } = user;
   const handleChange = (e) => {
-   
-      setUser({ ...user, [e.target.name]: e.target.value });
-    
+    setUser({ ...user, [e.target.name]: e.target.value });
   };
+
+  useEffect(() => {
+    const errorTimeout = setTimeout(() => {
+      dispatch(clearError());
+    }, 3000);
+
+    return () => {
+      clearTimeout(errorTimeout);
+    };
+  }, [error, dispatch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const userObject = {
       email,
-      password
+      password,
     };
-  
+
     console.log("User object before dispatch:", userObject);
-  
+
     try {
-     const response =  await dispatch(login(userObject));
-     console.log(response)
+      const response = await dispatch(login(userObject));
+      console.log(response);
       setUser({
         email: "",
         password: "",
       });
-     
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -49,9 +56,11 @@ function Login() {
         <h1 className="text-3xl text-center font-bold mb-4">Login</h1>
         {error && <p className="text-red-600 text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-          
           <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
+            <label
+              htmlFor="email"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
               Email
             </label>
             <input
@@ -65,7 +74,10 @@ function Login() {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
+            <label
+              htmlFor="password"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
               Password
             </label>
             <input
@@ -78,17 +90,20 @@ function Login() {
               required
             />
           </div>
-         
+
           <button
             type="submit"
             className="bg-blue-500 text-white w-full mb-5 p-2 rounded hover:bg-blue-700"
           >
             {loading ? "Logging In..." : "Log In"}
           </button>
-         
         </form>
-        <p className='text-center mb-4'>Don't have an account? <Link className='text-green-500 text-center mb-5' to={'/signup'}>Sign Up here</Link></p>
-
+        <p className="text-center mb-4">
+          Don't have an account?{" "}
+          <Link className="text-green-500 text-center mb-5" to={"/signup"}>
+            Sign Up here
+          </Link>
+        </p>
       </div>
     </div>
   );

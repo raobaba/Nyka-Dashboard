@@ -7,15 +7,17 @@ import { CiSearch, CiUser } from "react-icons/ci";
 import AddProductModal from "./AddProductModal";
 import Analytics from "./Analytics";
 import { logout } from "../redux/actions/user.actions";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts,deleteProduct } from "../redux/actions/product.actions";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import { IoIosArrowForward } from "react-icons/io";
 import { FiEdit3 } from "react-icons/fi";
 import { MdOutlineDeleteOutline } from "react-icons/md";
+import EditProductModal from "./EditProductModal";
 
 function Dashboard() {
+  const navigate = useNavigate();
   const [activeContent, setActiveContent] = useState("dashboard");
   const [isAddProductModalOpen, setAddProductModalOpen] = useState(false);
   const [filterGender, setFilterGender] = useState("");
@@ -24,6 +26,8 @@ function Dashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageLimit, setPageLimit] = useState(10);
+  const [isEditProductModalOpen, setEditProductModalOpen] = useState(false); 
+  const [selectedProductForEdit, setSelectedProductForEdit] = useState(null); 
 
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.product.loading);
@@ -57,6 +61,7 @@ function Dashboard() {
 
   const handleLogout = () => {
     dispatch(logout());
+    navigate('/login')
   };
 
   const handleButtonClick = (content) => {
@@ -65,6 +70,16 @@ function Dashboard() {
 
   const openAddProductModal = () => {
     setAddProductModalOpen(true);
+  };
+
+  const handleEditProduct = (product) => {
+    setSelectedProductForEdit(product);
+    setEditProductModalOpen(true);
+  };
+
+  const closeEditProductModal = () => {
+    setSelectedProductForEdit(null);
+    setEditProductModalOpen(false);
   };
 
   const closeAddProductModal = () => {
@@ -257,7 +272,10 @@ function Dashboard() {
                   </td>
                   <td className="py-2 px-4 whitespace-nowrap ">
                     <div className="text-blue-500 hover:underline flex gap-2">
-                      <FiEdit3 className="text-lg cursor-pointer ml-4" />
+                    <FiEdit3
+                    className="text-lg cursor-pointer ml-4"
+                    onClick={() => handleEditProduct(product)}
+                  />
                       <MdOutlineDeleteOutline
                       onClick={() => handleDeleteProduct(product._id)}
                       className="text-xl cursor-pointer"
@@ -315,6 +333,11 @@ function Dashboard() {
       <AddProductModal
         isOpen={isAddProductModalOpen}
         onClose={closeAddProductModal}
+      />
+      <EditProductModal
+        isOpen={isEditProductModalOpen}
+        onClose={closeEditProductModal}
+        selectedProduct={selectedProductForEdit}
       />
     </div>
   );

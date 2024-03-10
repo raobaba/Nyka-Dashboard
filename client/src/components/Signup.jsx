@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signup, clearError } from "../redux/actions/user.actions";
 
@@ -13,7 +13,7 @@ function Signup() {
   const [user, setUser] = useState({
     name: "",
     email: "",
-    password: ""
+    password: "",
   });
 
   const [avatar, setAvatar] = useState(null);
@@ -48,24 +48,24 @@ function Signup() {
       password,
       avatar,
     };
-  
+    const response = await dispatch(signup(userObject));
     try {
-      const response = await dispatch(signup(userObject));
-      console.log(response)
+      console.log("signup response", response);
+
       setUser({
         name: "",
         email: "",
         password: "",
       });
-     console.log(error)
-      setAvatar(null);
-      
+
+      const selectedFile = e.target.files[0];
+      setAvatar(selectedFile);
     } catch (error) {
       console.error("Error during signup:", error);
     }
-    
+    console.log(error);
   };
-  
+
   return (
     <div>
       <Navbar />

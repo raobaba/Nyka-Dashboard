@@ -73,6 +73,7 @@ const logout = createAsyncThunk(
       dispatch({ type: ActionTypes.LOGOUT_REQUEST });
       const response = await axios.get("http://localhost:8000/api/v1/logout");
       console.log("Logout response", response);
+      localStorage.removeItem('userData')
       dispatch({
         type: ActionTypes.LOGOUT_SUCCESS,
         payload: response.data.user,
