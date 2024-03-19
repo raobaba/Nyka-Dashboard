@@ -1,21 +1,9 @@
 import React from "react";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 
-function Pagination({ currentPage, setCurrentPage, pageLimit, setPageLimit, totalItems }) {
-  const totalPages = Math.ceil(totalItems / pageLimit);
-
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-  };
-
-  const handlePageLimitChange = (newLimit) => {
-    setPageLimit(newLimit);
-    console.log(newLimit)
-    setCurrentPage(1);
-  };
-
+function Pagination({ currentPage, handlePageChange, pageLimit, totalItems, handlePageLimitChange }) {
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center justify-end space-x-2">
       <button
         onClick={() => handlePageChange(currentPage - 1)}
         className="border px-3 py-2 border-gray-300 rounded-l focus:outline-none focus:ring focus:border-blue-300"
@@ -23,15 +11,13 @@ function Pagination({ currentPage, setCurrentPage, pageLimit, setPageLimit, tota
       >
         <GrFormPrevious />
       </button>
-      <button
-        className="bg-blue-500 text-white px-3 py-1 rounded focus:outline-none focus:ring focus:border-blue-300 text-lg md:text-xl lg:text-2xl"
-      >
+      <button className="bg-blue-500 text-white px-3 py-1 rounded focus:outline-none focus:ring focus:border-blue-300 text-md md:text-lg lg:text-lg">
         {currentPage}
       </button>
       <button
         onClick={() => handlePageChange(currentPage + 1)}
         className="border px-3 py-2 border-gray-300 rounded-r focus:outline-none focus:ring focus:border-blue-300"
-        disabled={currentPage === totalPages}
+        disabled={pageLimit > totalItems}
       >
         <GrFormNext />
       </button>

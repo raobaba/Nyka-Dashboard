@@ -1,15 +1,9 @@
 import React from "react";
-import { IoIosArrowForward } from "react-icons/io";
 import { FiEdit3 } from "react-icons/fi";
 import { MdOutlineDeleteOutline } from "react-icons/md";
-import { deleteProduct,editProduct } from "../redux/actions/product.actions";
-import { useDispatch } from "react-redux";
+import { IoIosArrowForward } from "react-icons/io";
 
-function ProductTable({ loading, error, products }) {
- const dispatch  =  useDispatch();
- const onDeleteProduct = (productId) => {
-  dispatch(deleteProduct(productId));
-};
+function ProductTable({ loading, error, products, handleEditProduct, handleDeleteProduct }) {
   return (
     <div className="w-full border h-auto min-h-96 mt-10 bg-white overflow-hidden">
       <div className="flex flex-col md:flex-row justify-between mt-2">
@@ -50,7 +44,6 @@ function ProductTable({ loading, error, products }) {
                   key={product.id}
                   className="hover:bg-gray-50 text-center border-b transition duration-300"
                 >
-                  {/* Display product details here */}
                   <td className="py-2 px-4 whitespace-nowrap">
                     <div className="flex gap-1 items-center">
                       <div className="w-8 h-8 border rounded-full bg-slate-100 ali flex items-center justify-center">
@@ -77,9 +70,12 @@ function ProductTable({ loading, error, products }) {
                   </td>
                   <td className="py-2 px-4 whitespace-nowrap ">
                     <div className="text-blue-500 hover:underline flex gap-2">
-                      <FiEdit3 className="text-lg cursor-pointer ml-4" />
+                      <FiEdit3
+                        className="text-lg cursor-pointer ml-4"
+                        onClick={() => handleEditProduct(product)}
+                      />
                       <MdOutlineDeleteOutline
-                        onClick={() => onDeleteProduct(product._id)}
+                        onClick={() => handleDeleteProduct(product._id)}
                         className="text-xl cursor-pointer"
                       />
                     </div>

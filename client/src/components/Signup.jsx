@@ -48,8 +48,10 @@ function Signup() {
       password,
       avatar,
     };
-    const response = await dispatch(signup(userObject));
+
     try {
+      
+      const response = await dispatch(signup(userObject));
       console.log("signup response", response);
 
       setUser({
