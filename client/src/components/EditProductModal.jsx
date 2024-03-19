@@ -1,24 +1,63 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { editProduct } from "../redux/actions/product.actions";
+import { editProduct, fetchProducts } from "../redux/actions/product.actions";
 
-const EditProductModal = ({ isOpen, onClose, selectedProduct, onSave }) => {
+const EditProductModal = ({ isOpen, onClose, selectedProduct }) => {
+  const dispatch = useDispatch();
   const [editedProduct, setEditedProduct] = useState({
-    productName: "",
+    name: "",
     gender: "",
     category: "",
     price: "",
     description: "",
+    picture: null,
   });
 
-  const dispatch = useDispatch();
-  const handleChange = (e) => {};
+  useEffect(() => {
+    if (selectedProduct) {
+      setEditedProduct({
+        name: selectedProduct.name,
+        gender: selectedProduct.gender,
+        category: selectedProduct.category,
+        price: selectedProduct.price,
+        description: selectedProduct.description,
+        picture: selectedProduct.picture, // Include picture in the state
+      });
+    }
+  }, [selectedProduct]);
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
+  const handleChange = (e) => {
+    if (e.target.name === "picture") {
+      const file = e.target.files[0];
+      setEditedProduct((prevState) => ({
+        ...prevState,
+        picture: file, // Update picture in the state
+      }));
+    } else {
+      const { name, value } = e.target;
+      setEditedProduct((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
 
-  useEffect(() => {}, []);
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    await dispatch(
+      editProduct({ editData: editedProduct, productId: selectedProduct._id })
+    );
+    await dispatch(
+      fetchProducts({
+        currentPage: 1,
+        pageLimit: 10,
+        sortOrder: "",
+        searchTerm: "",
+        filterOptions: { gender: "", category: "" },
+      })
+    );
+    onClose();
+  };
 
   return (
     <div className={`modal ${isOpen ? "block" : "hidden"}`}>
@@ -35,17 +74,18 @@ const EditProductModal = ({ isOpen, onClose, selectedProduct, onSave }) => {
           <form onSubmit={handleFormSubmit}>
             <div className="mb-2">
               <label
-                htmlFor="productName"
+                htmlFor="name"
                 className="block text-sm font-medium text-gray-600"
               >
                 Product Name
               </label>
               <input
                 type="text"
-                id="productName"
-                name="productName"
-                className="mt-1 p-2 border rounded w-full"
+                id="name"
+                name="name"
+                value={editedProduct.name}
                 onChange={handleChange}
+                className="mt-1 p-2 border rounded w-full"
                 required
               />
             </div>
@@ -60,8 +100,9 @@ const EditProductModal = ({ isOpen, onClose, selectedProduct, onSave }) => {
                 type="text"
                 id="gender"
                 name="gender"
-                className="mt-1 p-2 border rounded w-full"
+                value={editedProduct.gender}
                 onChange={handleChange}
+                className="mt-1 p-2 border rounded w-full"
                 required
               />
             </div>
@@ -76,8 +117,9 @@ const EditProductModal = ({ isOpen, onClose, selectedProduct, onSave }) => {
                 type="text"
                 id="category"
                 name="category"
-                className="mt-1 p-2 border rounded w-full"
+                value={editedProduct.category}
                 onChange={handleChange}
+                className="mt-1 p-2 border rounded w-full"
                 required
               />
             </div>
@@ -92,8 +134,9 @@ const EditProductModal = ({ isOpen, onClose, selectedProduct, onSave }) => {
                 type="number"
                 id="price"
                 name="price"
-                className="mt-1 p-2 border rounded w-full"
+                value={editedProduct.price}
                 onChange={handleChange}
+                className="mt-1 p-2 border rounded w-full"
                 required
               />
             </div>
@@ -107,8 +150,9 @@ const EditProductModal = ({ isOpen, onClose, selectedProduct, onSave }) => {
               <textarea
                 id="description"
                 name="description"
-                className="mt-1 p-2 border rounded w-full"
+                value={editedProduct.description}
                 onChange={handleChange}
+                className="mt-1 p-2 border rounded w-full"
                 required
               />
             </div>
@@ -125,7 +169,6 @@ const EditProductModal = ({ isOpen, onClose, selectedProduct, onSave }) => {
                 accept="image/*"
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
-                required
               />
             </div>
             <button

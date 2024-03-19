@@ -2,17 +2,17 @@ import { createReducer } from "@reduxjs/toolkit";
 import ProductActionTypes from "../actionTypes/product.actionTypes";
 
 const initialState = {
-    loading: false,
-    error: null,
-    addedProduct: null,
-    products: [],
-    filteredProducts: [],
-    filterOptions: {},
-    sortBy: 'price',
-    searchTerm: '',
-    currentPage: 1,  
-    pageLimit: 10,  
-  };
+  loading: false,
+  error: null,
+  addedProduct: null,
+  products: [],
+  filteredProducts: [],
+  filterOptions: {},
+  sortBy: 'price',
+  searchTerm: '',
+  currentPage: 1,  
+  pageLimit: 10,  
+};
 
 const productReducer = createReducer(initialState, (builder) => {
   builder
@@ -84,11 +84,15 @@ const productReducer = createReducer(initialState, (builder) => {
         loading: true,
         error: null,
       }))
-      .addCase(ProductActionTypes.DELETE_PRODUCT_SUCCESS, (state) => ({
-        ...state,
-        loading: false,
-        error: null,
-      }))
+      .addCase(ProductActionTypes.DELETE_PRODUCT_SUCCESS, (state, action) => {
+        const updatedProducts = state.products.filter(product => product._id !== action.payload);
+        return {
+          ...state,
+          loading: false,
+          products: updatedProducts,
+          error: null,
+        };
+      })
       .addCase(ProductActionTypes.DELETE_PRODUCT_FAILURE, (state, action) => ({
         ...state,
         loading: false,

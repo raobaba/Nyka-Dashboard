@@ -100,14 +100,37 @@ const renderProducts = async (req, res) => {
 const editProduct = async (req, res) => {
   const productId = req.params.id;
   const updatedProductData = req.body;
+  const { name, description, gender, category, price } = updatedProductData;
 
   try {
+    let pictureData = {};
+    if (req.files && req.files.picture) {
+      const myCloud = await cloudinary.uploader.upload(
+        req.files.picture.tempFilePath,
+        {
+          folder: "pictures",
+          width: 150,
+          crop: "scale",
+        }
+      );
+      pictureData = {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      };
+    }
+
     const updatedProduct = await Product.findOneAndUpdate(
       { _id: productId },
-      updatedProductData,
+      {
+        name,
+        description,
+        gender,
+        category,
+        price,
+        ...(Object.keys(pictureData).length && { picture: pictureData }),
+      },
       { new: true }
     );
-    console.log("data", updatedProduct);
 
     if (!updatedProduct) {
       return res.status(404).json({ message: "Product not found" });
@@ -115,9 +138,11 @@ const editProduct = async (req, res) => {
 
     res.status(200).json(updatedProduct);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 // Delete Product
 const deleteProduct = async (req, res) => {

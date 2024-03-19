@@ -31,7 +31,6 @@ function Dashboard() {
   const products = useSelector((state) => state.product.products);
   const totalItems = products.length;
 
-  console.log("Products", products);
   useEffect(() => {
     dispatch(
       fetchProducts({
@@ -52,6 +51,7 @@ function Dashboard() {
     filterGender,
     filterCategory
   ]);
+
   const userData = JSON.parse(localStorage.getItem("userData"));
   const userAvatarUrl = userData && userData.avatar && userData.avatar.url;
   const handleLogout = () => {
@@ -96,6 +96,7 @@ function Dashboard() {
 
   return (
     <div className="w-full h-screen flex flex-col md:flex-row">
+      
       {/* Sidebar */}
       <Sidebar
         activeContent={activeContent}
@@ -105,15 +106,18 @@ function Dashboard() {
 
       {/* Main Content */}
       <div className="flex-1 p-4 h-full bg-gray-100">
+
         {/* Dashboard content */}
         {activeContent === "dashboard" && (
           <div className="mb-10">
+
             {/* SearchBar content */}
             <SearchBar 
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
               userAvatarUrl={userAvatarUrl}
             />
+
             {/* Sorting, Filtering content */}
             <SortingFilteringContent
               filterGender={filterGender}
@@ -124,6 +128,7 @@ function Dashboard() {
               setSortOrder={setSortOrder}
               openAddProductModal={openAddProductModal}
             />
+            
             {/* Table content */}
             <ProductTable
               loading={loading}
@@ -132,6 +137,7 @@ function Dashboard() {
               handleEditProduct={handleEditProduct}
               handleDeleteProduct={handleDeleteProduct}
             />
+
             {/* Pagination content */}
             <Pagination
               currentPage={currentPage}
@@ -142,14 +148,17 @@ function Dashboard() {
             />
           </div>
         )}
+
         {/* Analytics content */}
         {activeContent === "analytics" && <Analytics />}
       </div>
+
       {/* Modal for Add Product */}
       <AddProductModal
         isOpen={isAddProductModalOpen}
         onClose={closeAddProductModal}
       />
+      
       {/* Modal for EditProduct */}
       <EditProductModal
         isOpen={isEditProductModalOpen}

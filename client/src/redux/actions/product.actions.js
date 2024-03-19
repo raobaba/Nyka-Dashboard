@@ -100,6 +100,7 @@ const fetchProducts = createAsyncThunk(
 const editProduct = createAsyncThunk(
   ProductActionTypes.EDIT_PRODUCT_REQUEST,
   async ({ editData, productId }, { dispatch }) => {
+    console.log(productId)
     try {
       const config = {
         headers: {
