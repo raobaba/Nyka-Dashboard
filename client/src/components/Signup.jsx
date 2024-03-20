@@ -50,7 +50,6 @@ function Signup() {
     };
 
     try {
-      
       const response = await dispatch(signup(userObject));
       console.log("signup response", response);
 
@@ -62,6 +61,7 @@ function Signup() {
 
       const selectedFile = e.target.files[0];
       setAvatar(selectedFile);
+    
     } catch (error) {
       console.error("Error during signup:", error);
     }

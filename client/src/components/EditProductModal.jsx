@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { editProduct, fetchProducts } from "../redux/actions/product.actions";
 
 const EditProductModal = ({ isOpen, onClose, selectedProduct }) => {
   const dispatch = useDispatch();
+  const loading = useSelector((state) => state.product.loading);
+  const error = useSelector((state) => state.product.error);
   const [editedProduct, setEditedProduct] = useState({
     name: "",
     gender: "",
@@ -70,7 +72,7 @@ const EditProductModal = ({ isOpen, onClose, selectedProduct }) => {
       <div className="modal-content fixed w-5/12 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 rounded-lg z-50">
         <div className="w-full m-auto bg-white h-[570px] p-4 z-50 rounded-lg">
           <h2 className="text-2xl font-bold mb-2">Edit Product</h2>
-
+          {error && <p className="text-red-500 text-center">{error}</p>}
           <form onSubmit={handleFormSubmit}>
             <div className="mb-2">
               <label
@@ -175,7 +177,7 @@ const EditProductModal = ({ isOpen, onClose, selectedProduct }) => {
               type="submit"
               className="bg-blue-500 text-white w-full mb-2 p-2 rounded hover:bg-blue-700"
             >
-              Save Changes
+              {loading ? "Saving changes..." : "Save changes"}
             </button>
           </form>
         </div>
