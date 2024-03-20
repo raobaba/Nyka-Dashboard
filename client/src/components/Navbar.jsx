@@ -11,6 +11,14 @@ function Navbar() {
     setMenuOpen(!isMenuOpen);
   };
 
+  // Define an array of menu items
+  const menuItems = [
+    { title: "Dashboard", link: "/dashboard" },
+    { title: "Services", link: "/services" },
+    { title: "Login", link: "/login" },
+    { title: "SignUp", link: "/signup" }
+  ];
+
   return (
     <div className="w-full bg-white shadow-md p-4 flex justify-between ">
       {/* Logo and menu button for small screens */}
@@ -24,33 +32,18 @@ function Navbar() {
         </button>
       </div>
 
-
       {/* Menu items for medium and large screens */}
       <div className={`md:flex md:space-x-4 ${isMenuOpen ? "flex" : "hidden"}`}>
-        <Link
-          to={"/dashboard"}
-          className="text-gray-700 font-semibold text-lg hover:text-blue-500 transition duration-300 ease-in-out"
-        >
-          Dashboard
-        </Link>
-        <Link
-          to={"/services"}
-          className="text-gray-700 font-semibold text-lg hover:text-blue-500 transition duration-300 ease-in-out"
-        >
-          Services
-        </Link>
-        <Link
-          to={"/login"}
-          className="text-gray-700 font-semibold text-lg hover:text-blue-500 transition duration-300 ease-in-out"
-        >
-          Login
-        </Link>
-        <Link
-          to={"/signup"}
-          className="text-gray-700 font-semibold text-lg hover:text-blue-500 transition duration-300 ease-in-out"
-        >
-          SignUp
-        </Link>
+        {/* Map over menu items and render dynamically */}
+        {menuItems.map((item, index) => (
+          <Link
+            key={index}
+            to={item.link}
+            className="text-gray-700 font-semibold text-lg hover:text-blue-500 transition duration-300 ease-in-out"
+          >
+            {item.title}
+          </Link>
+        ))}
       </div>
 
       {/* Add close button when menu is open */}
@@ -63,30 +56,16 @@ function Navbar() {
             >
               <IoMdClose />
             </button>
-            <Link
-              to={"/dashboard"}
-              className="text-gray-700 hover:text-blue-500 my-2"
-            >
-              Dashboard
-            </Link>
-            <Link
-              to={"/services"}
-              className="text-gray-700 hover:text-blue-500 my-2"
-            >
-              Services
-            </Link>
-            <Link
-              to={"/login"}
-              className="text-gray-700 hover:text-blue-500 my-2"
-            >
-              Login
-            </Link>
-            <Link
-              to={"/signup"}
-              className="text-gray-700 hover:text-blue-500 my-2"
-            >
-              SignUp
-            </Link>
+            {/* Map over menu items and render dynamically */}
+            {menuItems.map((item, index) => (
+              <Link
+                key={index}
+                to={item.link}
+                className="text-gray-700 hover:text-blue-500 my-2"
+              >
+                {item.title}
+              </Link>
+            ))}
           </div>
         </div>
       )}
