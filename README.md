@@ -1,0 +1,7 @@
+![Screenshot (77)](https://github.com/raobaba/Nyka-Dashboard/assets/99542983/a3308c84-2cbc-4622-8fe1-bb1ba046f422)
+![Screenshot (78)](https://github.com/raobaba/Nyka-Dashboard/assets/99542983/11717f04-160a-444f-8db0-d4cc8533495e)
+![Screenshot (79)](https://github.com/raobaba/Nyka-Dashboard/assets/99542983/0257df51-3731-4922-bccc-13a2eefd99f2)
+![Screenshot (80)](https://github.com/raobaba/Nyka-Dashboard/assets/99542983/8bfb0664-2f1f-44b5-a426-e8c6f2d3a22e)
+![Screenshot (81)](https://github.com/raobaba/Nyka-Dashboard/assets/99542983/496035ad-8642-4173-81e7-1c0cbadf110c)
+![Screenshot (82)](https://github.com/raobaba/Nyka-Dashboard/assets/99542983/39600772-77f9-45e5-a3c8-3aa11ec84e73)
+![Screenshot (83)](https://github.com/raobaba/Nyka-Dashboard/assets/99542983/4c5786fd-ed06-4de3-80dd-bab4b61058a1)
