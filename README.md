@@ -1,14 +1,14 @@
-# Nyka Dashboard
 
+Nyka Dashboard
 ## Introduction
 NYKA Dashboard: Simplified user interface for signup, login, and product management. Features include edit, delete, filter, sort, search, and analytics charts, offering comprehensive control and insights for users.
 
 ## Project Type
- Fullstack
+Fullstack
 
-## Deplolyed App
-Frontend: https://nyka-dashboard-system.netlify.app/
-Backend: https://server-4x2a.onrender.com
+## Deployed App
+Frontend: NYKA Dashboard Frontend
+Backend: NYKA Dashboard Backend
 Database: mongodb+srv://your-username:your-password@cluster0.vvtoxbl.mongodb.net/Nyka?retryWrites=true&w=majority
 
 ## Directory Structure
